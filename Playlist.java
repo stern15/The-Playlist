@@ -31,7 +31,6 @@ public class Playlist {
     }
 
     public boolean addSongPlaylist(String songPlaylist) {
-
         for (Album album : getAlbums()) {
             for (Song song : album.getSongs()) {
                 if (song.getSongTitle().equals(songPlaylist) ) {
@@ -46,12 +45,22 @@ public class Playlist {
         }
         return false;
     }
+    public boolean removeSongPlaylist(String songPlaylist){
+        for (Album album : getAlbums()) {
+            for (Song song : album.getSongs()) {
+                if (song.getSongTitle().equals(songPlaylist) ) {
+                   playlist.remove(song);
+                   return true;
+                }
 
+            }
+        }
+        return false;
+
+    }
 }
 
-//remove a song to a playlist
 
-//print songs in the playlist
 // Current song in the playlist
 //Next song in the playlist
 //Previous song in the playlist

@@ -62,16 +62,25 @@ public class Main {
                 case 9:
                     addSongPlaylist();
                     break;
-                //              case 10:
-                //                  removeSongPlaylist();
-                //                  break;
-                case 11:
+                case 10:
+                    removeSongPlaylist();
+                    break;
+//                case 11:
+//                    displayCurrentSong();
+//                    break;
+//                case 12:
+//                    nextSong();
+//                    break;
+//                case 13:
+//                    previousSong();
+//                    break;
+//                case 14:
+//                    replayCurrentSong();
+//                    break;
+                case 15:
                     printAllPlaylist();
                     break;
-                case 12:
-                    printMenuInstruction();
-                    break;
-                case 13:
+                case 16:
                     flag = false;
                     break;
                 default:
@@ -97,6 +106,8 @@ public class Main {
                 "\n===== Playlist =====" +
                 "\n\n9 - Add a song to the playlist" +
                 "\n10 - Remove a song to the playlist" +
+
+                //update the instruction
                 "\n11 - Print all the playlist" +
                 "\n12 - Open the playlist instruction\n" +
                 "\n\n13 - Quit the application");
@@ -439,8 +450,6 @@ public class Main {
     private static void addSongPlaylist() {
         System.out.println("Enter the song title:");
         String songTitle = scanner.nextLine();
-
-        //should check if the song already exist int he playlist
         boolean addedToPlaylist = playlist.addSongPlaylist(songTitle);
         if (addedToPlaylist) {
             System.out.println("\n\n" + songTitle + " successfully added to the playlist");
@@ -450,8 +459,18 @@ public class Main {
         }
 
     }
+    private static void removeSongPlaylist(){
+        System.out.println("Enter the song title:");
+        String songTitle = scanner.nextLine();
+        boolean removedFromPlaylist = playlist.removeSongPlaylist(songTitle);
+        if (removedFromPlaylist) {
+            System.out.println("\n\n" + songTitle + " successfully added to the playlist");
+        } else {
+            System.out.println("\n\n"+songTitle+" not found in any album");
+        }
 
-    //remove from the playlist
+    }
+
     private static void printAllPlaylist() {
         Iterator<Song> iterator = playlist.getPlaylist().iterator();
         System.out.println("\n\nThere is " + playlist.getPlaylist().size() + " songs in the playlist\n\n");
@@ -475,16 +494,5 @@ public class Main {
         }
         System.out.println("\n\n==================================");
     }
-
-    private static void printPlaylistInstruction() {
-        System.out.println("===== Playlist Menu =====" +
-                "\n\n0 - Print playlist instruction" +
-                "\n1 - Current song" +
-                "\n2 - Next song" +
-                "\n3 - Previous song" +
-                "\n4 - Replay current song" +
-                "\n5 - Quit playlist instruction");
-    }
-
 
 }
