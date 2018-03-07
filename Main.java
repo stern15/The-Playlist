@@ -1,16 +1,19 @@
 package playlist;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Album> albums = new ArrayList<Album>();
-
+    private static Playlist playlist =new Playlist(albums);
     private static Album album;
+
 
     public static void main(String[] args) {
         int action = 0;
-        LinkedList<Song> playlist = new LinkedList<Song>();
         boolean flag = true;
         printMenuInstruction();
         while (flag) {
@@ -18,7 +21,7 @@ public class Main {
             try {
                 action = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("The value you have input is not a valid integer\n\n");
+                System.out.println("\n\nThe value you have input is not a valid integer\n\n");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -57,13 +60,13 @@ public class Main {
                     printSongAlbum();
                     break;
                 case 9:
-                    addSongPlaylist(playlist);
+                    addSongPlaylist();
                     break;
-                //            case 10:
-                //                removeSongPlaylist();
-                //                break;
+                //              case 10:
+                //                  removeSongPlaylist();
+                //                  break;
                 case 11:
-                    printAllPlaylist(playlist);
+                    printAllPlaylist();
                     break;
                 case 12:
                     printMenuInstruction();
@@ -72,7 +75,7 @@ public class Main {
                     flag = false;
                     break;
                 default:
-                    System.out.println("\nPlease enter a number between 0-10\n\n");
+                    System.out.println("\n\nPlease enter a number between 0-10\n\n");
                     break;
             }
         }
@@ -108,14 +111,14 @@ public class Main {
             String artist = scanner.nextLine();
             album = new Album(albumTitle, artist);
             albums.add(album);
-            System.out.println("\n\n\"" + albumTitle + "\" album by " + artist + " successfully added...\n");
+            System.out.println("\n\n\"" + albumTitle + "\" album by " + artist + " successfully added...");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
 
             }
         } else {
-            System.out.println("\"" + albumTitle + "\" album already exist\n");
+            System.out.println("\n\n\"" + albumTitle + "\" album already exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -130,14 +133,14 @@ public class Main {
         String albumTitle = scanner.nextLine().toLowerCase();
         if (searchAlbum(albumTitle) >= 0) {
             albums.remove(searchAlbum(albumTitle));
-            System.out.println("\"" + albumTitle + "\" album successfully removed\n");
+            System.out.println("\n\n\"" + albumTitle + "\" album successfully removed");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
 
             }
         } else {
-            System.out.println("\"" + albumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + albumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -159,19 +162,19 @@ public class Main {
                 String artist = scanner.nextLine();
                 album = albums.get(searchAlbum(currentAlbumTitle));
                 album.setNewAlbum(newAlbumTitle, artist);
-                System.out.println("\"" + currentAlbumTitle + "\" successfully updated to " + "\"" +
-                        newAlbumTitle + "\" by " + artist + "\n");
+                System.out.println("\n\n\"" + currentAlbumTitle + "\" successfully updated to " + "\"" +
+                        newAlbumTitle + "\" by " + artist);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
 
                 }
             } else {
-                System.out.println("\"" + currentAlbumTitle + "\" album title already exist\n");
+                System.out.println("\n\n\"" + currentAlbumTitle + "\" album title already exist");
             }
 
         } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + currentAlbumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -189,8 +192,8 @@ public class Main {
         int hrTotalAlbum = hrMinSecTotalAlbum[0];
         int minTotalAlbum = hrMinSecTotalAlbum[1];
         int secTotalAlbum = hrMinSecTotalAlbum[2];
-        System.out.println("There is " + albums.size() + " album(s) with a total duration of " +
-                hrTotalAlbum + " hour(s) " + minTotalAlbum + " min(s) " + secTotalAlbum + " sec(s)\n");
+        System.out.println("\n\nThere is " + albums.size() + " album(s) with a total duration of " +
+                hrTotalAlbum + " hour(s) " + minTotalAlbum + " min(s) " + secTotalAlbum + " sec(s)\n\n");
 
         for (int i = 0; i < albums.size(); i++) {
             String albumTitle = albums.get(i).getAlbumTitle();
@@ -202,7 +205,7 @@ public class Main {
             int min = hrsMinSec[1];
             int sec = hrsMinSec[2];
             System.out.println((i + 1) + ".  ALBUM: " + albumTitle + "  ARTIST: " + artist + "  NO OF SONGS: " + noSongs +
-                    "  DURATION: " + hrs + " hour(s) " + min + ": min(s) " + sec + ": sec(s)");
+                    "  DURATION: " + hrs + " hour(s) " + min + " min(s) " + sec + " sec(s)");
         }
         System.out.println();
         try {
@@ -225,7 +228,7 @@ public class Main {
     }
 
     private static void addSongAlbum() {
-        int durationInSec = 0;
+        int durationInSec;
         System.out.println("Enter the album title:");
         String currentAlbumTitle = scanner.nextLine().toLowerCase();
 
@@ -233,6 +236,8 @@ public class Main {
 
             System.out.println("Enter the song title:");
             String songTitle = scanner.nextLine().toLowerCase();
+
+            //should check if the song already exist in the album
 
             if (album.searchPositionSong(songTitle) < 0) {
 
@@ -242,7 +247,7 @@ public class Main {
                     durationInSec = scanner.nextInt();
 
                 } catch (InputMismatchException e) {
-                    System.out.println("\nThe value you have input is not a valid integer\n\n");
+                    System.out.println("\n\nThe value you have input is not a valid integer");
                     scanner.nextLine();
                     return;
 
@@ -257,25 +262,24 @@ public class Main {
                     int sec = hrMinSecArray[2];
                     String artist = currentAlbum.getArtist();
 
-                    System.out.println("\n\n" + "\"" + songTitle + "\"" + " with duration of " + min
-                            + " min : " + sec + " sec, successfully added to \"" + currentAlbumTitle + "\" album" + " by " + artist + "\n");
+                    System.out.println("\n\n"  + songTitle  + " with duration of " + min
+                            + " min : " + sec + " sec, successfully added to \"" + currentAlbumTitle + "\" album" + " by " + artist );
 
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
 
                     }
-
                 } else {
-                    System.out.println("\n\nthe song's duration should be an integer between 0 second and 3600 seconds\n");
+                    System.out.println("\n\nthe song's duration should be an integer between 0 second and 3600 seconds");
                 }
 
 
             } else {
-                System.out.println("\n" + songTitle + " already exist in \"" + currentAlbumTitle + "\" album\n");
+                System.out.println("\n\n" + songTitle + " already exist in \"" + currentAlbumTitle + "\" album");
             }
         } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + currentAlbumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -293,9 +297,9 @@ public class Main {
             if (album.searchPositionSong(songTitle) >= 0) {
                 Album currentAlbum = albums.get(searchAlbum(currentAlbumTitle));
                 currentAlbum.removeSongAlbum(songTitle);
-                System.out.println(songTitle + " successfully deleted from \"" + currentAlbumTitle + "\" album\n");
+                System.out.println("\n\n"+songTitle + " successfully deleted from \"" + currentAlbumTitle + "\" album");
             } else {
-                System.out.println(songTitle + " does not exist in \"" + currentAlbumTitle + "\" album\n");
+                System.out.println("\n\n"+songTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
             }
             try {
                 Thread.sleep(1000);
@@ -303,7 +307,7 @@ public class Main {
 
             }
         } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + currentAlbumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -318,53 +322,62 @@ public class Main {
         String currentAlbumTitle = scanner.nextLine().toLowerCase();
         if (searchAlbum(currentAlbumTitle) >= 0) {
 
-            System.out.println("Enter the song title:");
-            String currentSongTitle = scanner.nextLine().toLowerCase();
-            if (album.searchPositionSong(currentSongTitle) >= 0) {
-                System.out.println("Enter the new song title:");
-                String newSongTitle = scanner.nextLine().toLowerCase();
-                System.out.println("Enter the song's duration in second:");
-                try {
-                    durationInSec = scanner.nextInt();
 
-                } catch (InputMismatchException e) {
-                    System.out.println("The value you have input is not a valid integer \n\n");
-                    scanner.nextLine();
-                    return;
-                }
+            for (int i = 0; i < albums.size(); i++) {
+                if (currentAlbumTitle.equals(albums.get(i).getAlbumTitle())) {
+
+                    System.out.println("Enter the song title:");
+                    String currentSongTitle = scanner.nextLine().toLowerCase();
+                    if (albums.get(i).searchPositionSong(currentSongTitle) >= 0) {
+                        System.out.println("Enter the new song title:");
+                        String newSongTitle = scanner.nextLine().toLowerCase();
+                        System.out.println("Enter the song's duration in second:");
+                        try {
+                            durationInSec = scanner.nextInt();
+
+                        } catch (InputMismatchException e) {
+                            System.out.println("\n\nThe value you have input is not a valid integer ");
+                            scanner.nextLine();
+                            return;
+                        }
 
 
-                if (durationInSec > 0 && durationInSec < 3600) {
+                        if (durationInSec > 0 && durationInSec < 3600) {
 
-                    Album currentAlbum = albums.get(searchAlbum(currentAlbumTitle));
-                    currentAlbum.updateSongAlbum(currentSongTitle, newSongTitle, durationInSec);
-                    int[] hrMinSec = currentAlbum.secToHrMinSec(durationInSec);
-                    int min = hrMinSec[1];
-                    int sec = hrMinSec[2];
-                    System.out.println(currentSongTitle + " successfully updated to " + newSongTitle + " with duration of " +
-                            min + " min : " + sec + " sec\n");
+                            Album currentAlbum = albums.get(i);
+                            currentAlbum.updateSongAlbum(currentSongTitle, newSongTitle, durationInSec);
+                            int[] hrMinSec = album.secToHrMinSec(currentAlbum.totalDuration());
+                            int min = hrMinSec[1];
+                            int sec = hrMinSec[2];
+                            System.out.println("\n\n"+currentSongTitle + " successfully updated to " + newSongTitle + " with duration of " +
+                                    min + " min : " + sec + " sec");
 
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+
+                            }
+
+                        } else {
+                            System.out.println("\n\nthe song's duration should be an integer between 0 second and 3600 seconds");
+                        }
+
+
+                    } else {
+                        System.out.println("\n\n"+currentSongTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
+                    }
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
 
                     }
 
-                } else {
-                    System.out.println("the song's duration should be an integer between 0 second and 3600 seconds\n");
                 }
-
-
-            } else {
-                System.out.println(currentSongTitle + " does not exist in \"" + currentAlbumTitle + "\" album\n");
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
 
-            }
+
         } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + currentAlbumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -378,46 +391,90 @@ public class Main {
         System.out.println("Enter the album title:");
         String currentAlbumTitle = scanner.nextLine().toLowerCase();
         if (searchAlbum(currentAlbumTitle) >= 0) {
-            int totalDuration = album.totalDuration();
-            int[] hrsMinSecArray = album.secToHrMinSec(totalDuration);
-            int hrs = hrsMinSecArray[0];
-            int min = hrsMinSecArray[1];
-            int sec = hrsMinSecArray[2];
-            System.out.println("There is " + album.getSongs().size() +
-                    " song(s) in \"" + album.getAlbumTitle() +
-                    "\" album with a total duration of " + hrs + " hour(s) " + min + " min(s) " + sec + " sec(s)" + "\n");
+
+            for (int i = 0; i < albums.size(); i++) {
+                if (currentAlbumTitle.equals(albums.get(i).getAlbumTitle())) {
+                    int totalDuration = albums.get(i).totalDuration();
+                    int[] hrsMinSecArray = album.secToHrMinSec(totalDuration);
+                    int hrs = hrsMinSecArray[0];
+                    int min = hrsMinSecArray[1];
+                    int sec = hrsMinSecArray[2];
+                    System.out.println("\n\nThere is " + albums.get(i).getSongs().size() +
+                            " song(s) in \"" + albums.get(i).getAlbumTitle() +
+                            "\" album with a total duration of " + hrs + " hour(s) " + min + " min(s) " + sec + " sec(s)" + "\n\n");
 
 
-            for (int i = 0; i < album.getSongs().size(); i++) {
+                    for (int j = 0; j < albums.get(i).getSongs().size(); j++) {
 
-                Song currentSong = album.getSongs().get(i);
-                String songTitle = currentSong.getSongTitle();
-                String artist = album.getArtist();
-                int currentSongDuration = currentSong.getDuration();
-                Album currentAlbum = albums.get(searchAlbum(currentAlbumTitle));
-                hrsMinSecArray = currentAlbum.secToHrMinSec(currentSongDuration);
-                min = hrsMinSecArray[1];
-                sec = hrsMinSecArray[2];
+                        Song currentSong = albums.get(i).getSongs().get(j);
+                        String songTitle = currentSong.getSongTitle();
+                        String artist = albums.get(i).getArtist();
+                        int currentSongDuration = currentSong.getDuration();
+                        int songDuration = albums.get(i).getSongs().get(j).getDuration();
+                        int[] songDurationMinSec = album.secToHrMinSec(songDuration);
+                        int songMin = songDurationMinSec[1];
+                        int songSec = songDurationMinSec[2];
 
-                System.out.println((1 + i) + ".  SONG: " + songTitle + "  ARTIST: " + artist + "  DURATION: " +
-                        min + " min " + sec + " sec");
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+                        System.out.println((1 + j) + ".  SONG: " + songTitle + "  ARTIST: " + artist + "  DURATION: " +
+                                songMin + " min " + songSec + " sec");
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                }
 
             }
         } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
+            System.out.println("\n\n\"" + currentAlbumTitle + "\" album does not exist");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
 
             }
         }
+    }
+
+    private static void addSongPlaylist() {
+        System.out.println("Enter the song title:");
+        String songTitle = scanner.nextLine();
+
+        //should check if the song already exist int he playlist
+        boolean addedToPlaylist = playlist.addSongPlaylist(songTitle);
+        if (addedToPlaylist) {
+            System.out.println("\n\n" + songTitle + " successfully added to the playlist");
+        } else {
+            System.out.println("\n\nFailed to add the song the playlist, " +
+                    "The song might have been already added to the playlist or the song does not exist in any of the album");
+        }
 
     }
 
+    //remove from the playlist
+    private static void printAllPlaylist() {
+        Iterator<Song> iterator = playlist.getPlaylist().iterator();
+        System.out.println("\n\nThere is " + playlist.getPlaylist().size() + " songs in the playlist\n\n");
+
+        if (iterator.hasNext()) {
+            for (int i = 0; i < playlist.getPlaylist().size(); i++) {
+
+                Song currentSong = iterator.next();
+                String songTitle = currentSong.getSongTitle();
+                int durationInSec = currentSong.getDuration();
+                int[] hrMinSec = album.secToHrMinSec(durationInSec);
+                int min = hrMinSec[1];
+                int sec = hrMinSec[2];
+
+
+
+
+                System.out.println((1 + i) + ". SONG: " + songTitle + "  DURATION: " +
+                        min + " min : " + sec + " sec");
+            }
+        }
+        System.out.println("\n\n==================================");
+    }
 
     private static void printPlaylistInstruction() {
         System.out.println("===== Playlist Menu =====" +
@@ -426,79 +483,8 @@ public class Main {
                 "\n2 - Next song" +
                 "\n3 - Previous song" +
                 "\n4 - Replay current song" +
-                "\n5 - Quit playlist instruction\n\n");
-    }
-
-    private static void addSongPlaylist(LinkedList<Song> playlist) {
-
-        System.out.println("Enter the album title:");
-        String currentAlbumTitle = scanner.nextLine().toLowerCase();
-        if (searchAlbum(currentAlbumTitle) >= 0) {
-            System.out.println("Enter the song title:");
-            String songTitle = scanner.nextLine().toLowerCase();
-            int songPosition = album.searchPositionSong(songTitle);
-            if (songPosition >= 0) {
-                Song currentSong = album.getSongs().get(songPosition);
-
-
-                    playlist.add(currentSong);
-                    System.out.println("\n\"" + songTitle + "\" successfully added to the playlist");
-
-
-            } else {
-                System.out.println(songTitle + " does not exist in \"" + currentAlbumTitle + "\" album\n");
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
-            }
-        } else {
-            System.out.println("\"" + currentAlbumTitle + "\" album does not exist\n");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
-            }
-        }
-
-
-    }
-
-    //remove a song to a playlist
-    private static void printAllPlaylist(LinkedList<Song> playlist) {
-        Iterator<Song> iterator = playlist.iterator();
-        System.out.println("\nYou have " + playlist.size() + " songs in the playlist\n\n");
-
-        while (iterator.hasNext()) {
-            for (int i = 0; i < playlist.size(); i++) {
-
-                Song currentSong = iterator.next();
-                String songTitle = currentSong.getSongTitle();
-                int durationInSec = currentSong.getDuration();
-                String artist = searchAlbumArtist(currentSong);
-                int[] hrMinSec = album.secToHrMinSec(durationInSec);
-                int min = hrMinSec[1];
-                int sec = hrMinSec[2];
-
-
-                System.out.println((1 + i) + ". SONG: " + songTitle + "  ARTIST: " + artist + "  DURATION: " +
-                        min + " min : " + sec + " sec");
-            }
-        }
-        System.out.println("\n==================================");
+                "\n5 - Quit playlist instruction");
     }
 
 
-    private static String searchAlbumArtist(Song song) {
-        for (int i = 0; i < albums.size(); i++) {
-            String songTitle = albums.get(i).getSongs().get(i).getSongTitle();
-            if (songTitle.equals(song.getSongTitle())) {
-                String artist = albums.get(i).getArtist();
-                return artist;
-            }
-            return null;
-        }
-        return null;
-    }
 }
