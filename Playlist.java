@@ -1,9 +1,7 @@
 package playlist;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class Playlist {
     private LinkedList<Song> playlist = new LinkedList<Song>();
@@ -33,8 +31,8 @@ public class Playlist {
     public boolean addSongPlaylist(String songPlaylist) {
         for (Album album : getAlbums()) {
             for (Song song : album.getSongs()) {
-                if (song.getSongTitle().equals(songPlaylist) ) {
-                    if(!playlist.contains(song)){
+                if (song.getSongTitle().equals(songPlaylist)) {
+                    if (!playlist.contains(song)) {
                         playlist.add(song);
                         return true;
                     }
@@ -45,25 +43,20 @@ public class Playlist {
         }
         return false;
     }
-    public boolean removeSongPlaylist(String songPlaylist){
-        for (Album album : getAlbums()) {
-            for (Song song : album.getSongs()) {
-                if (song.getSongTitle().equals(songPlaylist) ) {
-                   playlist.remove(song);
-                   return true;
-                }
 
+    public boolean removeSongPlaylist(String songPlaylist) {
+        for (Song song : getPlaylist()) {
+            if (song.getSongTitle().equals(songPlaylist)) {
+                playlist.remove(song);
+                return true;
             }
+            return false;
+
         }
+
         return false;
 
     }
 }
-
-
-// Current song in the playlist
-//Next song in the playlist
-//Previous song in the playlist
-// Replay current song
 
 

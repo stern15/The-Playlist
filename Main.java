@@ -1,14 +1,11 @@
 package playlist;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Album> albums = new ArrayList<Album>();
-    private static Playlist playlist =new Playlist(albums);
+    private static Playlist playlist = new Playlist(albums);
     private static Album album;
 
 
@@ -22,11 +19,7 @@ public class Main {
                 action = scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("\n\nThe value you have input is not a valid integer\n\n");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    return;
-                }
+                break;
             }
             scanner.nextLine();
 
@@ -65,22 +58,19 @@ public class Main {
                 case 10:
                     removeSongPlaylist();
                     break;
-//                case 11:
-//                    displayCurrentSong();
-//                    break;
-//                case 12:
-//                    nextSong();
-//                    break;
-//                case 13:
-//                    previousSong();
-//                    break;
-//                case 14:
-//                    replayCurrentSong();
-//                    break;
-                case 15:
+                case 11:
+                    playlistOption();
+                    break;
+                case 12:
                     printAllPlaylist();
                     break;
-                case 16:
+                case 13:
+                    System.out.println("\n\nQuiting the application...");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
                     flag = false;
                     break;
                 default:
@@ -106,10 +96,8 @@ public class Main {
                 "\n===== Playlist =====" +
                 "\n\n9 - Add a song to the playlist" +
                 "\n10 - Remove a song to the playlist" +
-
-                //update the instruction
-                "\n11 - Print all the playlist" +
-                "\n12 - Open the playlist instruction\n" +
+                "\n11 - Playlist option" +
+                "\n12 - Print the playlist" +
                 "\n\n13 - Quit the application");
 
     }
@@ -117,6 +105,7 @@ public class Main {
     private static void addAlbum() {
         System.out.println("Enter the album title:");
         String albumTitle = scanner.nextLine().toLowerCase();
+        //check if the album exist already
         if (searchAlbum(albumTitle) < 0) {
             System.out.println("Enter the artist's name:");
             String artist = scanner.nextLine();
@@ -273,8 +262,8 @@ public class Main {
                     int sec = hrMinSecArray[2];
                     String artist = currentAlbum.getArtist();
 
-                    System.out.println("\n\n"  + songTitle  + " with duration of " + min
-                            + " min : " + sec + " sec, successfully added to \"" + currentAlbumTitle + "\" album" + " by " + artist );
+                    System.out.println("\n\n" + songTitle + " with duration of " + min
+                            + " min : " + sec + " sec, successfully added to \"" + currentAlbumTitle + "\" album" + " by " + artist);
 
                     try {
                         Thread.sleep(1000);
@@ -308,9 +297,9 @@ public class Main {
             if (album.searchPositionSong(songTitle) >= 0) {
                 Album currentAlbum = albums.get(searchAlbum(currentAlbumTitle));
                 currentAlbum.removeSongAlbum(songTitle);
-                System.out.println("\n\n"+songTitle + " successfully deleted from \"" + currentAlbumTitle + "\" album");
+                System.out.println("\n\n" + songTitle + " successfully deleted from \"" + currentAlbumTitle + "\" album");
             } else {
-                System.out.println("\n\n"+songTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
+                System.out.println("\n\n" + songTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
             }
             try {
                 Thread.sleep(1000);
@@ -360,7 +349,7 @@ public class Main {
                             int[] hrMinSec = album.secToHrMinSec(currentAlbum.totalDuration());
                             int min = hrMinSec[1];
                             int sec = hrMinSec[2];
-                            System.out.println("\n\n"+currentSongTitle + " successfully updated to " + newSongTitle + " with duration of " +
+                            System.out.println("\n\n" + currentSongTitle + " successfully updated to " + newSongTitle + " with duration of " +
                                     min + " min : " + sec + " sec");
 
                             try {
@@ -375,7 +364,7 @@ public class Main {
 
 
                     } else {
-                        System.out.println("\n\n"+currentSongTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
+                        System.out.println("\n\n" + currentSongTitle + " does not exist in \"" + currentAlbumTitle + "\" album");
                     }
                     try {
                         Thread.sleep(1000);
@@ -459,16 +448,116 @@ public class Main {
         }
 
     }
-    private static void removeSongPlaylist(){
+
+    private static void removeSongPlaylist() {
         System.out.println("Enter the song title:");
         String songTitle = scanner.nextLine();
         boolean removedFromPlaylist = playlist.removeSongPlaylist(songTitle);
         if (removedFromPlaylist) {
-            System.out.println("\n\n" + songTitle + " successfully added to the playlist");
+            System.out.println("\n\n" + songTitle + " successfully removed from the playlist");
         } else {
-            System.out.println("\n\n"+songTitle+" not found in any album");
+            System.out.println("\n\n" + songTitle + " not found on the playlist");
         }
 
+    }
+
+    private static void playlistOption() {
+        ListIterator<Song> listIterator = playlist.getPlaylist().listIterator();
+        boolean quit = false;
+        boolean goingForward = true;
+        if (playlist.getPlaylist().isEmpty()) {
+            System.out.println("\n\nNo song in the Playlist");
+        } else {
+            printPlaylistInstruction();
+            System.out.println("");
+            while (!quit) {
+
+                int action = 0;
+                System.out.println("\n\nEnter your choice :");
+                try {
+                    action = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("\n\nThe value you have input is not a valid integer \n\n");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        return;
+                    }
+                }
+                scanner.nextLine();
+
+
+                switch (action) {
+                    case 0:
+                        printPlaylistInstruction();
+                        break;
+                    case 1:
+                        if (!goingForward) {
+                            if (listIterator.hasNext()) {
+                                listIterator.next();
+                            }
+                            goingForward = true;
+                        }
+                        if (listIterator.hasNext()) {
+                            System.out.println("\n\nThe next song: " + listIterator.next().getSongTitle());
+                        } else {
+                            System.out.println("\n\nThe End Of The Playlist");
+                            goingForward = false;
+                        }
+                        break;
+                    case 2:
+                        if (goingForward) {
+                            if (listIterator.hasPrevious()) {
+                                listIterator.previous();
+                            }
+                            goingForward = false;
+                        }
+                        if (listIterator.hasPrevious()) {
+                            System.out.println("\n\nThe previous song: " + listIterator.previous().getSongTitle());
+                        } else {
+                            System.out.println("\n\nThe Start Of The Playlist");
+                            goingForward = true;
+                        }
+                        break;
+
+                    case 3:
+                        if (goingForward) {
+                            if(listIterator.hasPrevious()) {
+                                System.out.println("\n\nThe repeating current Song: " +
+                                        listIterator.previous().getSongTitle());
+                                goingForward = false;
+                            }
+                            else {
+                                System.out.println("\n\nThe Start Of The Playlist");
+                            }
+
+                        } else {
+                            if(listIterator.hasNext()) {
+                                System.out.println("\n\nThe repeating current Song: " + listIterator.next().getSongTitle());
+                                goingForward = true;
+                            }
+                            else {
+                                System.out.println("\n\nThe End Of The Playlist");
+                            }
+
+                        }
+                        break;
+                    case 4:
+                        System.out.println("\n\nQuiting the playlist menu...\n\n");
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+
+                        }
+                        quit = true;
+                        printMenuInstruction();
+                        break;
+                    default:
+                        System.out.println("\n\nPlease enter a number between 0-5\n\n");
+                        break;
+                }
+            }
+        }
     }
 
     private static void printAllPlaylist() {
@@ -486,13 +575,22 @@ public class Main {
                 int sec = hrMinSec[2];
 
 
-
-
                 System.out.println((1 + i) + ". SONG: " + songTitle + "  DURATION: " +
                         min + " min : " + sec + " sec");
             }
         }
         System.out.println("\n\n==================================");
     }
+
+    private static void printPlaylistInstruction() {
+        System.out.println("\n\n0 - Print the instruction\n" +
+                "\n1 - The next song" +
+                "\n2 - The previous song" +
+                "\n3 - Repeat the current song" +
+                "\n4 - Quit the playlist menu");
+
+
+    }
+
 
 }
