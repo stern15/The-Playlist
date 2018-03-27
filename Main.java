@@ -1,4 +1,5 @@
-package playlist;
+package com.challenge;
+
 
 import java.util.*;
 
@@ -185,16 +186,18 @@ public class Main {
 
     private static void printAlbums() {
         int totalAlbumsDuration = 0;
+        //calculate the total duration
         for (int j = 0; j < albums.size(); j++) {
             totalAlbumsDuration += albums.get(j).totalDuration();
         }
+        //array that hold hr:min:sec
         int[] hrMinSecTotalAlbum = album.secToHrMinSec(totalAlbumsDuration);
         int hrTotalAlbum = hrMinSecTotalAlbum[0];
         int minTotalAlbum = hrMinSecTotalAlbum[1];
         int secTotalAlbum = hrMinSecTotalAlbum[2];
         System.out.println("\n\nThere is " + albums.size() + " album(s) with a total duration of " +
                 hrTotalAlbum + " hour(s) " + minTotalAlbum + " min(s) " + secTotalAlbum + " sec(s)\n\n");
-
+        //list of the albums
         for (int i = 0; i < albums.size(); i++) {
             String albumTitle = albums.get(i).getAlbumTitle();
             String artist = albums.get(i).getArtist();
@@ -215,7 +218,7 @@ public class Main {
         }
     }
 
-
+    //return -1 when the album is not found
     private static int searchAlbum(String albumTitle) {
         for (int i = 0; i < albums.size(); i++) {
             Album eachAlbum = albums.get(i);
@@ -238,7 +241,6 @@ public class Main {
             String songTitle = scanner.nextLine().toLowerCase();
 
             //should check if the song already exist in the album
-
             if (album.searchPositionSong(songTitle) < 0) {
 
 
@@ -253,7 +255,7 @@ public class Main {
 
                 }
 
-
+                //the duration of the song should not be more than 1hr or a negative number
                 if (durationInSec > 0 && durationInSec < 3600) {
                     Album currentAlbum = albums.get(searchAlbum(currentAlbumTitle));
                     currentAlbum.addSongAlbum(songTitle, durationInSec);
@@ -469,7 +471,6 @@ public class Main {
             System.out.println("\n\nNo song in the Playlist");
         } else {
             printPlaylistInstruction();
-            System.out.println("");
             while (!quit) {
 
                 int action = 0;
@@ -492,12 +493,15 @@ public class Main {
                         printPlaylistInstruction();
                         break;
                     case 1:
+                        //check if the iterator is going forward if not,set it to go forward
+                        //to avoid the repeat
                         if (!goingForward) {
                             if (listIterator.hasNext()) {
                                 listIterator.next();
                             }
                             goingForward = true;
                         }
+                        //check if the iterator has next,if yes print the next element
                         if (listIterator.hasNext()) {
                             System.out.println("\n\nThe next song: " + listIterator.next().getSongTitle());
                         } else {
@@ -521,6 +525,9 @@ public class Main {
                         break;
 
                     case 3:
+                        //check if the iterator is going forward,
+                        //if it is check if it has a previous,
+                        // print the previous and set goingForward to false
                         if (goingForward) {
                             if(listIterator.hasPrevious()) {
                                 System.out.println("\n\nThe repeating current Song: " +
@@ -533,7 +540,8 @@ public class Main {
 
                         } else {
                             if(listIterator.hasNext()) {
-                                System.out.println("\n\nThe repeating current Song: " + listIterator.next().getSongTitle());
+                                System.out.println("\n\nThe repeating current Song: " +
+                                        listIterator.next().getSongTitle());
                                 goingForward = true;
                             }
                             else {
@@ -581,7 +589,7 @@ public class Main {
         }
         System.out.println("\n\n==================================");
     }
-
+    //the playlist menu
     private static void printPlaylistInstruction() {
         System.out.println("\n\n0 - Print the instruction\n" +
                 "\n1 - The next song" +

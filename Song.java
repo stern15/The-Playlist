@@ -1,4 +1,4 @@
-package playlist;
+package com.challenge;
 
 public class Song {
     private String songTitle;

@@ -1,4 +1,5 @@
-package playlist;
+package com.challenge;
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -7,7 +8,7 @@ public class Playlist {
     private LinkedList<Song> playlist = new LinkedList<Song>();
     private ArrayList<Album> albums = new ArrayList<Album>();
 
-    public Playlist(ArrayList<Album> albums) {
+    Playlist(ArrayList<Album> albums) {
         this.albums = albums;
     }
 
@@ -15,10 +16,10 @@ public class Playlist {
         return playlist;
     }
 
-    public ArrayList<Album> getAlbums() {
+    private ArrayList<Album> getAlbums() {
         return albums;
     }
-
+    //return the artist name
     public String getArtist(Album album) {
         for (int i = 0; i < getAlbums().size(); i++) {
             if (album.getArtist().equals(getAlbums().get(i).getArtist())) {
@@ -29,8 +30,9 @@ public class Playlist {
     }
 
     public boolean addSongPlaylist(String songPlaylist) {
-        for (Album album : getAlbums()) {
+        for (Album album : albums) {
             for (Song song : album.getSongs()) {
+                //check if the song exist in the playlist
                 if (song.getSongTitle().equals(songPlaylist)) {
                     if (!playlist.contains(song)) {
                         playlist.add(song);
